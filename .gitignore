@@ -2,3 +2,4 @@ build/*
 !.foreverignore
 node_modules
 .idea
+.env
