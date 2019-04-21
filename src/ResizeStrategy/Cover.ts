@@ -1,8 +1,23 @@
 import {IResizeStrategy} from "../IResizeStrategy";
+import {ISize} from "../ISize";
 
 export class Cover implements IResizeStrategy
 {
-    getResizeFlags(): string {
-        return "^";
+    getPredictedSize(originalSize: ISize, requestedSize: ISize): ISize {
+        const originalRatio = originalSize.width / originalSize.height;
+        const requestedRatio = requestedSize.width / requestedSize.height;
+
+        let predictedSize;
+
+        if (originalRatio > requestedRatio) {
+            predictedSize = {width: Math.round(requestedSize.height*originalRatio), height: requestedSize.height}
+        } else {
+            predictedSize = {width: requestedSize.width, height: Math.round(requestedSize.width / originalRatio)};
+        }
+
+        if (predictedSize.width > originalSize.width) return originalSize;
+        if (predictedSize.height > originalSize.height) return originalSize;
+
+        return predictedSize;
     }
 }
