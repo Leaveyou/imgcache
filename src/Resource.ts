@@ -1,10 +1,9 @@
 import {IFormatHandler} from "./IFormatHandler";
 
 export class Resource {
-
-    private resourceId: string;
-    private filePath: string;
-    private handler: IFormatHandler;
+    public readonly resourceId: string;
+    public readonly filePath: string;
+    public readonly handler: IFormatHandler;
 
     public  constructor(resourceId: string, filePath: string, handler: IFormatHandler) {
         this.resourceId = resourceId;
