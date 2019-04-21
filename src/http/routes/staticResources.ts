@@ -9,13 +9,21 @@ import {ISize} from "../../ISize";
 
 const router = Router();
 
-const currentRoute = router.route("/*");
 
 // Logging middleware
 router.use( (request, response, next) => {
-    console.log("aaaaaaaa");
+    console.log("Logging middleware not implemented");
     next();
 });
+
+// Security middleware
+router.use( (request, response, next) => {
+    console.log("Security middleware not implemented");
+    next();
+});
+
+
+const currentRoute = router.route("/*");
 
 
 /**
@@ -95,7 +103,5 @@ async function getResource(resourceId: string): Promise <Resource>
     let imageState = gm(resolvedPath);
     return new Resource(resourceId, resolvedPath, imageState);
 }
-
-
 
 export default router;
