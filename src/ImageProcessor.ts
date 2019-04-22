@@ -1,8 +1,8 @@
 import {Size} from "./Size";
 
-export interface ImageManipulator
+export interface ImageProcessor
 {
-    resize(requestedSize: Size): Promise <Buffer>;
+    getResized(requestedSize: Size): Promise <Buffer>;
     promiseGetSize(): Promise <Size>;
     promiseGetFormat(): Promise <string>;
 
