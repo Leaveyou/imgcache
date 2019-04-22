@@ -1,14 +1,14 @@
-import {IResizeStrategy} from "../IResizeStrategy";
-import {ISize} from "../ISize";
+import {ResizeStrategy} from "../ResizeStrategy";
+import {Size} from "../Size";
 
-export class Fit implements IResizeStrategy
+export class Fit implements ResizeStrategy
 {
-    getPredictedSize(originalSize: ISize, requestedSize: ISize): ISize
+    getPredictedSize(originalSize: Size, requestedSize: Size): Size
     {
         const originalRatio = originalSize.width / originalSize.height;
         const requestedRatio = requestedSize.width / requestedSize.height;
 
-        let predictedSize: ISize;
+        let predictedSize: Size;
 
         if (originalRatio > requestedRatio) {
             predictedSize = {width: requestedSize.width, height: Math.round(requestedSize.width/originalRatio)}

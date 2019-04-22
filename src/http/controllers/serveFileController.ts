@@ -1,11 +1,8 @@
-import {ISize} from "../../ISize";
-import {getResourcePath} from "../../FileResolver";
+import {Size} from "../../Size";
 import {Request, Response} from 'express';
-import {Resource} from "../../Resource";
 import * as localisation from "../../utils/localisation";
 import * as config from "../../utils/config";
-import gm from 'gm';
-import path from "path";
+import {resource} from "../../utils/config";
 
 /**
  * Ensure the size parameter is of correct format and reasonable size
@@ -46,21 +43,9 @@ function parseSize(request: Request): {width: number, height: number}
     return {width: width, height: height};
 }
 
-async function getResource(resourceId: string): Promise <Resource>
-{
-    const resolvedPath = await getResourcePath(resourceId);
-    const extension = path.extname(resolvedPath);
-
-    if (config.EXTENSIONS_SUPPORTED.indexOf(extension) == -1) {
-        throw new Error(`Extension not supported: ${extension}`);
-    }
-    let imageState = gm(resolvedPath);
-    return new Resource(resourceId, resolvedPath, imageState);
-}
-
 export async function serveFileController(request: Request, response: Response)
 {
-    let requestedSize: ISize;
+    let requestedSize: Size;
     try {
         requestedSize = parseSize(request);
     } catch (error) {
@@ -72,17 +57,17 @@ export async function serveFileController(request: Request, response: Response)
 
     const fileUri = decodeURI(request.path);
 
-    let resource: Resource;
+
     try {
-        resource = await getResource(fileUri);
+        await resource.init(fileUri);
     } catch (error) {
         console.log(error);
         return response.status(404).send(localisation.cannotFindImage);
     }
 
-    let resizedImage = await resource.getResizedImageContents(requestedSize, config.RESIZE_STRATEGY);
-    let format = await resource.getImageFormat();
+    let resizedImage = await resource.resize(requestedSize);
+    let format = await resource.promiseGetFormat();
 
-    response.contentType(`image/${format.toLowerCase()}`);
+    response.contentType(`image/${format}`);
     return response.send(resizedImage);
 }

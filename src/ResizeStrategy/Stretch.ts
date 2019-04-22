@@ -1,9 +1,9 @@
-import {IResizeStrategy} from "../IResizeStrategy";
-import {ISize} from "../ISize";
+import {ResizeStrategy} from "../ResizeStrategy";
+import {Size} from "../Size";
 
-export class Stretch implements IResizeStrategy
+export class Stretch implements ResizeStrategy
 {
-    getPredictedSize(originalSize: ISize, requestedSize: ISize): ISize
+    getPredictedSize(originalSize: Size, requestedSize: Size): Size
     {
         let predictedSize = requestedSize;
         if (predictedSize.width > originalSize.width) return originalSize;

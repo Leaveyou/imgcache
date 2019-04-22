@@ -1,9 +1,9 @@
-import {IResizeStrategy} from "../IResizeStrategy";
-import {ISize} from "../ISize";
+import {ResizeStrategy} from "../ResizeStrategy";
+import {Size} from "../Size";
 
-export class Cover implements IResizeStrategy
+export class Cover implements ResizeStrategy
 {
-    getPredictedSize(originalSize: ISize, requestedSize: ISize): ISize {
+    getPredictedSize(originalSize: Size, requestedSize: Size): Size {
         const originalRatio = originalSize.width / originalSize.height;
         const requestedRatio = requestedSize.width / requestedSize.height;
 
