@@ -1,30 +1,11 @@
-import {Request, Response, Router} from 'express';
+import {ISize} from "../../ISize";
 import {getResourcePath} from "../../FileResolver";
+import {Request, Response} from 'express';
 import {Resource} from "../../Resource";
 import * as localisation from "../../utils/localisation";
 import * as config from "../../utils/config";
 import gm from 'gm';
 import path from "path";
-import {ISize} from "../../ISize";
-
-const router = Router();
-
-
-// Logging middleware
-router.use( (request, response, next) => {
-    console.log("Logging middleware not implemented");
-    next();
-});
-
-// Security middleware
-router.use( (request, response, next) => {
-    console.log("Security middleware not implemented");
-    next();
-});
-
-
-const currentRoute = router.route("/*");
-
 
 /**
  * Ensure the size parameter is of correct format and reasonable size
@@ -65,33 +46,6 @@ function parseSize(request: Request): {width: number, height: number}
     return {width: width, height: height};
 }
 
-currentRoute.get(async (request: Request, response: Response, next) => {
-    let requestedSize: ISize;
-    try {
-        requestedSize = parseSize(request);
-    } catch (error) {
-        return response.status(400).send(
-            localisation.incorrectSize
-                .replace("%s", `${config.MAX_SIZE.width}x${config.MAX_SIZE.height}`));
-    }
-
-    const fileUri = request.path;
-
-    let resource: Resource;
-    try {
-        resource = await getResource(fileUri);
-    } catch (error) {
-        return response.status(404).send(localisation.cannotFindImage);
-    }
-
-    let resizedImage = await resource.getResizedImageContents(requestedSize, config.RESIZE_STRATEGY);
-    let format = await resource.getImageFormat();
-    console.log(format);
-    response.contentType(`image/${format.toLowerCase()}`);
-    return response.send(resizedImage);
-});
-
-
 async function getResource(resourceId: string): Promise <Resource>
 {
     const resolvedPath = await getResourcePath(resourceId);
@@ -104,4 +58,31 @@ async function getResource(resourceId: string): Promise <Resource>
     return new Resource(resourceId, resolvedPath, imageState);
 }
 
-export default router;
+export async function serveFileController(request: Request, response: Response)
+{
+    let requestedSize: ISize;
+    try {
+        requestedSize = parseSize(request);
+    } catch (error) {
+        console.log(error);
+        return response.status(400).send(
+            localisation.incorrectSize
+                .replace("%s", `${config.MAX_SIZE.width}x${config.MAX_SIZE.height}`));
+    }
+
+    const fileUri = decodeURI(request.path);
+
+    let resource: Resource;
+    try {
+        resource = await getResource(fileUri);
+    } catch (error) {
+        console.log(error);
+        return response.status(404).send(localisation.cannotFindImage);
+    }
+
+    let resizedImage = await resource.getResizedImageContents(requestedSize, config.RESIZE_STRATEGY);
+    let format = await resource.getImageFormat();
+
+    response.contentType(`image/${format.toLowerCase()}`);
+    return response.send(resizedImage);
+}
