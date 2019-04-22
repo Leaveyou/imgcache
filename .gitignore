@@ -1,5 +1,7 @@
 build/*
-!.foreverignore
+!.gitkeep
 node_modules
 .idea
 .env
+cache/*
+!.foreverignore

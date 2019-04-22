@@ -3,7 +3,7 @@ import {Size} from "../Size";
 
 export class Stretch implements ResizeStrategy
 {
-    getPredictedSize(originalSize: Size, requestedSize: Size): Size
+    predictSize(originalSize: Size, requestedSize: Size): Size
     {
         let predictedSize = requestedSize;
         if (predictedSize.width > originalSize.width) return originalSize;

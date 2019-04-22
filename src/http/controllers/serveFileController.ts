@@ -51,7 +51,12 @@ export async function serveFileController(request: Request, response: Response) 
         return response.status(404).send(localisation.cannotFindImage);
     }
 
-    let resizedImage = await imageProcessor.getResized(requestedSize);
+    let resizedImage;
+    try {
+        resizedImage = await imageProcessor.getResized(requestedSize);
+    } catch (error) {
+        console.log(error);
+    }
 
     let format = await imageProcessor.promiseGetFormat();
     response.contentType(`image/${format}`);

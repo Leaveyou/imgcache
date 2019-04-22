@@ -3,7 +3,7 @@ import {Size} from "../Size";
 
 export class Cover implements ResizeStrategy
 {
-    getPredictedSize(originalSize: Size, requestedSize: Size): Size {
+    predictSize(originalSize: Size, requestedSize: Size): Size {
         const originalRatio = originalSize.width / originalSize.height;
         const requestedRatio = requestedSize.width / requestedSize.height;
 

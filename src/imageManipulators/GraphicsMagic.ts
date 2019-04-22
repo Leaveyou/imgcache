@@ -3,58 +3,55 @@ import gm from "gm";
 import {Size} from "../Size";
 import {ResizeStrategy} from "../ResizeStrategy";
 import path from "path";
-import {realpath} from "fs";
+import fs, {realpath} from "fs";
 import {CacheProvider} from "../CacheProvider";
 
-export class GraphicsMagic implements ImageProcessor {
-    private resourceId: string;
+export class GraphicsMagic implements ImageProcessor
+{
+    private resourceId!: string;
     private fullPath!: string;
     private image!: gm.State;
     private readonly staticPath: string;
     private readonly resizeStrategy: ResizeStrategy;
     private cacheProvider: CacheProvider;
 
-    public constructor(staticPath: string | undefined, resizeStrategy: ResizeStrategy, cacheProvider: CacheProvider) {
+    public constructor(staticPath: string, resizeStrategy: ResizeStrategy, cacheProvider: CacheProvider) {
         this.resizeStrategy = resizeStrategy;
         this.cacheProvider = cacheProvider;
-        if (staticPath == undefined) throw new Error("Please set `STATIC_PATH` environment variable");
         this.staticPath = staticPath;
-    }
-
-    private static validateExtension(filePath: string) {
-        const extension = path.extname(filePath);
-        if (['.jpg', '.jpeg', '.png'].indexOf(extension) == -1)
-            throw new Error("File extension is not supported");
     }
 
     async init(filePath: string): Promise<void> {
         this.resourceId = filePath;
         this.fullPath = await this.promiseGetResourcePath(filePath);
-        GraphicsMagic.validateExtension(this.fullPath);
+        const extension = path.extname(this.fullPath);
+        if (['.jpg', '.jpeg', '.png'].indexOf(extension) == -1)
+            throw new Error("File extension is not supported");
         this.image = gm(this.fullPath);
     }
 
     async getResized(requestedSize: Size): Promise<Buffer> {
-        const originalSize = await this.promiseGetSize();
-        const predictedSize = this.resizeStrategy.getPredictedSize(originalSize, requestedSize);
 
-        let cachedFile = null;
+        const originalSize = await this.promiseGetSize();
+        const persistedSize = this.resizeStrategy.predictSize(originalSize, requestedSize);
+
+        let cachedFile: Buffer | null = null;
         try {
-            cachedFile = await this.cacheProvider.get(this.resourceId, predictedSize);
+            const notOlderThan = (await fs.promises.stat(this.fullPath)).mtime;
+            cachedFile = await this.cacheProvider.get(this.resourceId, persistedSize, notOlderThan);
         } catch (error) {
-            // todo: cache failed. log
+            // todo: mark fetching from original
+            console.log("###### From original");
         }
 
         if (cachedFile) {
-            return cachedFile;
+            console.log("###### From cache");
+            return await cachedFile;
         }
 
-
-        this.image.resize(predictedSize.width, predictedSize.height, "!");
-        const buffer = await this.promiseGetBuffer();
-
-        this.cacheProvider.set(name, ttl)
-
+        this.image.resize(persistedSize.width, persistedSize.height, "!");
+        const buffer = this.promiseGetBuffer();
+        this.cacheProvider.set(this.resourceId, persistedSize, await buffer);
         return buffer;
     }
 
@@ -73,16 +70,7 @@ export class GraphicsMagic implements ImageProcessor {
         return new Promise((resolve, reject) => {
             this.image.format((error, format) => {
                 if (error) reject(error);
-                return resolve(format);
-            });
-        });
-    }
-
-    private promiseGetBuffer(): Promise<Buffer> {
-        return new Promise((resolve, reject) => {
-            this.image.toBuffer((error, buffer) => {
-                if (error) return reject(error);
-                return resolve(buffer);
+                return resolve(format.toLowerCase());
             });
         });
     }
@@ -98,6 +86,15 @@ export class GraphicsMagic implements ImageProcessor {
                     reject(`Path invalid: ${resolvedPath}`);
                 }
                 resolve(resolvedPath);
+            });
+        });
+    }
+
+    private promiseGetBuffer(): Promise<Buffer> {
+        return new Promise((resolve, reject) => {
+            this.image.toBuffer((error, buffer) => {
+                if (error) return reject(error);
+                return resolve(buffer);
             });
         });
     }
