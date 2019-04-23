@@ -9,11 +9,11 @@ into them, or `stretch` to match the aspect ratio.
 * Support for multiple edge cases in input files. Examples bundled.
     * special characters: `cu spații & diacritice.jpg`
     * multiple formats, even transparency: `fsm.png`. Can technically support all formats supported by 
-    [graphicsmagic](http://www.graphicsmagick.org/formats.html) if not for extension whitelist.
+    [graphicsmagick](http://www.graphicsmagick.org/formats.html) if not for extension whitelist.
     * Extension whitelist
     * subfolders in source directory: `subfolder/imagine.jpg`
-    * Invalidate cache on original file mtime changes
-    * both .jpeg and .jpg extensions supported
+    * Invalidate cache on original file `mtime` changes
+    * both `.jpeg` and `.jpg` extensions supported
 * docker setup
 * Resized file caching
 * Http cache headers also offered by framework.
@@ -105,21 +105,4 @@ sudo docker run \
 ### Step 3 - Check results
 
 Open a web browser, curl or wget the application:
-`localhost:8888/static/bh.jpg?size=2000x2000`
-
-## Development usage
-
-Like above, but mount all folders of interest for development
-
-~~~ bash
-sudo docker run \
-    --publish 8080:80 \
-    --env CACHE_PATH=/var/www/imgcache/cache \
-    --env STATIC_PATH=/var/www/imgcache/static \
-    --env RESIZE_STRATEGY=FIT \
-    --env PORT=80 \
-    --volume ${pwd}/static:/var/www/imgcache/static \
-    --volume ${pwd}/build:/var/www/imgcache/build \
-    --volume ${pwd}/node_modules:/var/www/imgcache/node_modules \
-    homework
-~~~
+http://localhost:8888/static/bh.jpg?size=2000x2000
