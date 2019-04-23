@@ -25,6 +25,7 @@ const getResizeStrategy = (strategy: string): ResizeStrategy => {
     }
 };
 
+if (!process.env.PORT) throw new Error("Please set `PORT` environment variable");
 if (!process.env.CACHE_PATH) throw new Error("Please set `CACHE_PATH` environment variable");
 if (!process.env.STATIC_PATH) throw new Error("Please set `STATIC_PATH` environment variable");
 
@@ -35,3 +36,4 @@ export const imageProcessor: ImageProcessorInterface = new GraphicsMagic(
 );
 
 export const MAX_SIZE: Size = {width: 9999, height: 9999};
+export const PORT: number = parseInt(process.env.PORT);

@@ -1,6 +1,6 @@
 import application from "./application";
-
-const port = 8080;
+import * as config from "./utils/config";
+const port = config.PORT;
 application.listen(port, function () {
     console.log('Listening on port ' + port + '...');
 });

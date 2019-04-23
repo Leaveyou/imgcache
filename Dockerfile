@@ -1,8 +1,11 @@
-FROM node:8-slim
+FROM node:10-stretch
 ENV NPM_CONFIG_LOGLEVEL info
-WORKDIR /usr/src/app
+WORKDIR /var/www/imgcache
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 8080
+RUN apt-get update
+RUN apt install -y graphicsmagick
+RUN npm run tsc
+EXPOSE 80
 CMD [ "npm", "start" ]

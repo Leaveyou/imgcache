@@ -35,16 +35,23 @@ export class GraphicsMagic implements ImageProcessor
         const originalSize = await this.promiseGetSize();
         const persistedSize = this.resizeStrategy.predictSize(originalSize, requestedSize);
 
+        if (originalSize == persistedSize) {
+            // todo: mark serving original
+            console.log("###### Served original");
+            return this.promiseGetBuffer();
+        }
+
         let cachedFile: Buffer | null = null;
         try {
             const notOlderThan = (await fs.promises.stat(this.fullPath)).mtime;
             cachedFile = await this.cacheProvider.get(this.resourceId, persistedSize, notOlderThan);
         } catch (error) {
-            // todo: mark fetching from original
-            console.log("###### From original");
+            // todo: mark resizing from original
+            console.log("###### resized");
         }
 
         if (cachedFile) {
+            // todo: mark fetching from cache
             console.log("###### From cache");
             return await cachedFile;
         }
