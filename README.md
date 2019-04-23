@@ -86,7 +86,7 @@ The arrangement above makes it so that cache can be deleted on a per-file basis.
 
 Run from repository directory:
 ~~~ bash
-docker build -t homework .
+sudo docker build -t homework .
 ~~~
 
 ### Step 2 - Run image
@@ -98,7 +98,7 @@ sudo docker run \
     --env RESIZE_STRATEGY=FIT \
     --env NODE_ENV=production \
     --env PORT=80 \
-    --volume ${pwd}/static:/var/www/imgcache/static \
+    --volume `pwd`/static:/var/www/imgcache/static \
     homework
 ~~~
 
