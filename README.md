@@ -22,15 +22,14 @@ into them, or `stretch` to match the aspect ratio.
 using `FIT` or `COVER` strategies which preserve aspect ratio don't present the chance of ignoring 
 an available cached dimension.
 * some naive unit tests 
+* stats page and monitoring
 
 ### It doesn't do: 
 
 * Automatic cache eviction, but the CacheGateway interface setter signature does contain `ttl` 
 parameter for implementing it on a separate gateway.
 
-### // Todo: `(if you work at Ownzones and see this, I might have failed)`
-
-* stats page and monitoring
+### // Todo:
 * simple rate limiting
 * rate limit for cache fails might also be feasible
 
