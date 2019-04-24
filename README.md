@@ -109,39 +109,27 @@ http://localhost:8888/static/bh.jpg?size=2000x2000
 
 ## Swarm usage
 
-### Step 1 - Build the image
-
-Run from repository directory:
+* Build the image
 ~~~ bash
-sudo docker build -t homework .
+sudo docker run \
+    --publish 8888:80 \
+    --env CACHE_PATH=/var/www/imgcache/cache \
+    --env STATIC_PATH=/var/www/imgcache/static \
+    --env RESIZE_STRATEGY=FIT \
+    --env NODE_ENV=production \
+    --env PORT=80 \
+    --volume `pwd`/static:/var/www/imgcache/static \
+    homework
 ~~~
-
-### Step 2 initialize swarm mode
-
-~~~ bash
-sudo docker swarm init
-~~~
-
-### Step 3 Deploy `homework` stack
-
-~~~ bash
-sudo docker stack deploy -c docker-compose.yml homework
-~~~
-
-### Step 4 - Check results
-
-~~~
+* Run from repository directory: \
+`sudo docker build -t homework .`
+* Initialize swarm mode \
+`sudo docker swarm init`
+* Deploy 'homework' stack \
+`sudo docker stack deploy -c docker-compose.yml homework`
+* Check results \
 http://localhost:8888/static/bh.jpg?size=2000x2000
-~~~
-
-### Step 5 - Log into grafana 
-
-~~~
-http://localhost:3003
-~~~
-
-### Step 5 - Import the supplied dashboard
-
-~~~
-./docker/grafana.json
-~~~
+* Log into grafana - http://localhost:3003
+    * user: `root`
+    * password: `root`
+* Import the supplied dashboard `./docker/grafana.json`
