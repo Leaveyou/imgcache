@@ -24,7 +24,7 @@ an available cached dimension.
     
 ### It doesn't do: 
 
-* Automatic cache eviction, but the CacheProvider interface setter signature does contain `ttl` 
+* Automatic cache eviction, but the CacheGateway interface setter signature does contain `ttl` 
 parameter for implementing it on a separate gateway.
 
 ### // Todo: `(if you work at Ownzones and see this, I might have failed)`

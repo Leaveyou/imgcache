@@ -1,12 +1,12 @@
 import * as dotenv from "dotenv";
-import {Fit} from "../resizeStrategy/Fit";
-import {Cover} from "../resizeStrategy/Cover";
-import {Stretch} from "../resizeStrategy/Stretch";
-import {Size} from "../Size";
-import {DiskStorage as DiskStorageCacheGateway} from "../cacheGateways/DiskStorage";
-import {GraphicsMagic} from "../imageManipulators/GraphicsMagic";
-import {ImageProcessor as ImageProcessorInterface} from "../ImageProcessor";
-import {ResizeStrategy} from "../ResizeStrategy";
+import {Fit} from "./domains/resizer/services/resizeStrategy/Fit";
+import {Cover} from "./domains/resizer/services/resizeStrategy/Cover";
+import {Stretch} from "./domains/resizer/services/resizeStrategy/Stretch";
+import {Size} from "./domains/resizer/models/Size";
+import {DiskStorage as DiskStorageCacheGateway} from "./domains/resizer/services/cacheGateways/DiskStorage";
+import {GraphicsMagic} from "./domains/resizer/services/imageProcessors/GraphicsMagic";
+import {ImageProcessor as ImageProcessorInterface} from "./domains/resizer/services/ImageProcessor";
+import {ResizeStrategy} from "./domains/resizer/services/ResizeStrategy";
 
 // todo: use a more "production friendly" solution
 let path = `${__dirname}/../../.env`;

@@ -1,8 +1,8 @@
-import {Size} from "../../Size";
+import {Size} from "../models/Size";
 import {Request, Response} from 'express';
-import * as localisation from "../../utils/localisation";
-import * as config from "../../utils/config";
-import {imageProcessor} from "../../utils/config";
+import * as localisation from "../../../utils/localisation";
+import * as config from "../../../config";
+import {imageProcessor} from "../../../config";
 
 /**
  * Ensure the size parameter is of correct format and reasonable size
