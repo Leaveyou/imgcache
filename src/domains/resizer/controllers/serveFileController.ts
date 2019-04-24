@@ -40,7 +40,6 @@ export async function serveFileController(request: Request, response: Response) 
     try {
         requestedSize = parseSize(request);
     } catch (error) {
-        console.log(error);
         stats.incrementError();
         return response.status(400).send(
             localisation.incorrectSize
@@ -50,7 +49,6 @@ export async function serveFileController(request: Request, response: Response) 
     try {
         await imageProcessor.init(fileUri);
     } catch (error) {
-        console.log(error);
         stats.incrementNotFound();
         return response.status(404).send(localisation.cannotFindImage);
     }
