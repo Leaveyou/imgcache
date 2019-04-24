@@ -16,8 +16,8 @@ export class DiskStorage implements CacheGateway {
 
     async get(name: string, size: Size, notOlderThan: Date): Promise<Buffer> {
         const fullPath = this.predictPath(name, size);
-        const cacheMsTime = (await fs.promises.stat(fullPath)).mtime;
-        if (cacheMsTime > notOlderThan) {
+        const cacheTime = (await fs.promises.stat(fullPath)).mtime;
+        if (cacheTime > notOlderThan) {
             return fs.promises.readFile(fullPath);
         }
         await fs.promises.unlink(fullPath);

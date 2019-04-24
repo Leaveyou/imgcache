@@ -1,4 +1,3 @@
-import * as dotenv from "dotenv";
 import {Fit} from "./domains/resizer/services/resizeStrategy/Fit";
 import {Cover} from "./domains/resizer/services/resizeStrategy/Cover";
 import {Stretch} from "./domains/resizer/services/resizeStrategy/Stretch";
@@ -7,10 +6,6 @@ import {DiskStorage as DiskStorageCacheGateway} from "./domains/resizer/services
 import {GraphicsMagic} from "./domains/resizer/services/imageProcessors/GraphicsMagic";
 import {ImageProcessor as ImageProcessorInterface} from "./domains/resizer/services/ImageProcessor";
 import {ResizeStrategy} from "./domains/resizer/services/ResizeStrategy";
-
-// todo: use a more "production friendly" solution
-let path = `${__dirname}/../../.env`;
-dotenv.config({path: path});
 
 const getResizeStrategy = (strategy: string): ResizeStrategy => {
     switch (strategy) {

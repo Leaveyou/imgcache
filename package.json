@@ -8,7 +8,8 @@
     "start-dev": "forever --spinSleepTime 1000 --minUptime 1000 --watch --loglevel info --watchDirectory build build/server.js",
     "start": "forever --spinSleepTime 1000 --minUptime 1000 --loglevel info build/server.js",
     "tsc": "tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "test": "jest"
   },
   "dependencies": {
     "@types/dotenv": "^6.1.1",
@@ -29,6 +30,5 @@
     "@types/jest": "^24.0.11",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2"
-  },
-  "test": "jest"
+  }
 }
