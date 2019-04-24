@@ -5,6 +5,7 @@ import {ResizeStrategy} from "../ResizeStrategy";
 import path from "path";
 import fs, {realpath} from "fs";
 import {CacheGateway} from "../CacheGateway";
+import {Stats} from "../Stats";
 
 export class GraphicsMagic implements ImageProcessor
 {
@@ -14,11 +15,13 @@ export class GraphicsMagic implements ImageProcessor
     private readonly staticPath: string;
     private readonly resizeStrategy: ResizeStrategy;
     private cacheProvider: CacheGateway;
+    private stats: Stats;
 
-    public constructor(staticPath: string, resizeStrategy: ResizeStrategy, cacheProvider: CacheGateway) {
+    public constructor(staticPath: string, resizeStrategy: ResizeStrategy, cacheProvider: CacheGateway, stats: Stats) {
         this.resizeStrategy = resizeStrategy;
         this.cacheProvider = cacheProvider;
         this.staticPath = staticPath;
+        this.stats = stats;
     }
 
     async init(filePath: string): Promise<void> {
@@ -36,8 +39,7 @@ export class GraphicsMagic implements ImageProcessor
         const persistedSize = this.resizeStrategy.predictSize(originalSize, requestedSize);
 
         if (originalSize == persistedSize) {
-            // todo: mark serving original
-            console.log("###### Served original");
+            this.stats.incrementOriginalHit();
             return this.promiseGetBuffer();
         }
 
@@ -46,13 +48,11 @@ export class GraphicsMagic implements ImageProcessor
             const notOlderThan = (await fs.promises.stat(this.fullPath)).mtime;
             cachedFile = await this.cacheProvider.get(this.resourceId, persistedSize, notOlderThan);
         } catch (error) {
-            // todo: mark resizing from original
-            console.log("###### resized");
+            this.stats.incrementCacheMiss();
         }
 
         if (cachedFile) {
-            // todo: mark fetching from cache
-            console.log("###### From cache");
+            this.stats.incrementCacheHit()
             return await cachedFile;
         }
 

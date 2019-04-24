@@ -34,11 +34,14 @@ function parseSize(request: Request): { width: number, height: number } {
 }
 
 export async function serveFileController(request: Request, response: Response) {
+    const stats = config.stats;
+
     let requestedSize: Size;
     try {
         requestedSize = parseSize(request);
     } catch (error) {
         console.log(error);
+        stats.incrementError();
         return response.status(400).send(
             localisation.incorrectSize
                 .replace("%s", `${config.MAX_SIZE.width}x${config.MAX_SIZE.height}`));
@@ -48,6 +51,7 @@ export async function serveFileController(request: Request, response: Response) 
         await imageProcessor.init(fileUri);
     } catch (error) {
         console.log(error);
+        stats.incrementNotFound();
         return response.status(404).send(localisation.cannotFindImage);
     }
 
@@ -60,5 +64,6 @@ export async function serveFileController(request: Request, response: Response) 
 
     let format = await imageProcessor.promiseGetFormat();
     response.contentType(`image/${format}`);
+
     return response.send(resizedImage);
 }
