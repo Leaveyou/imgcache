@@ -1,0 +1,42 @@
+version: '3.5'
+
+services:
+  # primary application
+  node:
+    image: homework
+    hostname: node
+    volumes:
+      - type: bind
+        source: ./static/
+        target: /var/www/imgcache/static/
+        read_only: false
+      - type: bind
+        source: ./build/
+        target: /var/www/imgcache/build/
+        read_only: false
+    networks:
+      - trazNet
+    ports:
+      - 8888:80
+    environment:
+      CACHE_PATH: "/var/www/imgcache/cache"
+      STATIC_PATH: "/var/www/imgcache/static"
+      RESIZE_STRATEGY: "FIT"
+      NODE_ENV: "production"
+      PORT: 80
+      STATSD_HOST: "statsd"
+      STATSD_PORT: 8125
+
+  statsd:
+    hostname: statsd
+    image: samuelebistoletti/docker-statsd-influxdb-grafana
+    networks:
+      - trazNet
+    ports:
+      - 3003:3003
+      - 3004:8888
+      - 8086:8086
+      - 8125:8125/udp
+networks:
+  trazNet:
+    driver: overlay

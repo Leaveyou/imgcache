@@ -106,3 +106,42 @@ sudo docker run \
 
 Open a web browser, curl or wget the application:
 http://localhost:8888/static/bh.jpg?size=2000x2000
+
+## Swarm usage
+
+### Step 1 - Build the image
+
+Run from repository directory:
+~~~ bash
+sudo docker build -t homework .
+~~~
+
+### Step 2 initialize swarm mode
+
+~~~ bash
+sudo docker swarm init
+~~~
+
+### Step 3 Deploy `homework` stack
+
+~~~ bash
+sudo docker stack deploy -c docker-compose.yml homework
+~~~
+
+### Step 4 - Check results
+
+~~~
+http://localhost:8888/static/bh.jpg?size=2000x2000
+~~~
+
+### Step 5 - Log into grafana 
+
+~~~
+http://localhost:3003
+~~~
+
+### Step 5 - Import the supplied dashboard
+
+~~~
+./docker/grafana.json
+~~~

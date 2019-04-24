@@ -11,7 +11,7 @@ export class Stats {
 
     private increment(stat: string) {
         console.log(`## ${stat}`);
-        this.client.increment(stat, 1, (error: Error, buffer: Buffer) => {
+        this.client.increment(stat, 1, (error?: Error, buffer?: Buffer) => {
             if (error) {
                 console.log(error);
             }
