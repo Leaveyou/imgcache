@@ -133,3 +133,10 @@ http://localhost:8888/static/bh.jpg?size=2000x2000
     * user: `root`
     * password: `root`
 * Import the supplied dashboard `./docker/grafana.json`
+
+## Testing the application
+
+The application is covered by a small test suite. You can run the test suite by running `npm test` inside the running container.
+
+Use `sudo docker ps` to get the running container name and then run \
+`sudo docker container exec -it <containerName> npm test`
