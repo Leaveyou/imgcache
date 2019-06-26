@@ -19,7 +19,7 @@
     "@types/helmet": "0.0.43",
     "@types/node-statsd": "^0.1.2",
     "dotenv": "^7.0.0",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "express-promise-router": "^3.0.3",
     "favicon": "0.0.2",
     "forever": "^1.0.0",
