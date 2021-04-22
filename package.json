@@ -24,7 +24,7 @@
     "favicon": "0.0.2",
     "forever": "^1.0.0",
     "gm": "^1.23.1",
-    "helmet": "^4.1.1",
+    "helmet": "^4.5.0",
     "node-statsd": "^0.1.1",
     "typescript": "^4.0.3"
   },
