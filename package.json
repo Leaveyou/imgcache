@@ -26,7 +26,7 @@
     "gm": "^1.23.1",
     "helmet": "^5.0.1",
     "node-statsd": "^0.1.1",
-    "typescript": "^4.5.4"
+    "typescript": "^4.8.3"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
