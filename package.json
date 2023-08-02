@@ -22,7 +22,7 @@
     "express": "^4.17.2",
     "express-promise-router": "^4.1.1",
     "favicon": "0.0.2",
-    "forever": "^4.0.1",
+    "forever": "^4.0.3",
     "gm": "^1.23.1",
     "helmet": "^5.0.1",
     "node-statsd": "^0.1.1",
